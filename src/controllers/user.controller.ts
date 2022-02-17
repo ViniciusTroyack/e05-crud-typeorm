@@ -1,4 +1,3 @@
-import { isAdmin } from './../middlewares/adminAuthorization.middleware';
 import { Request, Response, NextFunction } from "express";
 import {createUser, listAll, getOne, updateUser, deleteUser} from "../services/user.service";
 import ErrorClass from "../error/ErrorClass";
@@ -30,7 +29,8 @@ export const getProfile = async (req: Request, res: Response) => {
 }
 
 export const update = async (req: Request, res: Response, next: NextFunction) => {
-    const currentUser = req.user
+    const loggedUser = req.user;
+    const currentUser = await getOne(loggedUser?.id);
     const { uuid } = req.params;
     const data = req.body;
     
@@ -48,14 +48,15 @@ export const update = async (req: Request, res: Response, next: NextFunction) =>
 }
 
 export const deleteProfile = async (req: Request, res: Response, next: NextFunction) => {
-    const currentUser = req.user
+    const loggedUser = req.user;
+    const currentUser = await getOne(loggedUser?.id);
     const { uuid } = req.params;
    
     if(currentUser?.id != uuid && currentUser?.isAdmin !== true){
         return next(new ErrorClass('Missing admin permissions', 401))
     }
 
-    const updatedUser = await deleteUser(uuid)
+    const deletedUser = await deleteUser(uuid)
 
     res.send({message: "User deleted with success"})
 }

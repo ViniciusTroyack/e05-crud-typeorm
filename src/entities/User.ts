@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, CreateDateColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, BeforeInsert, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity('users')
 export default class User {
@@ -21,7 +21,7 @@ export default class User {
     @CreateDateColumn()
     createdAt!: Date;
 
-    @CreateDateColumn()
+    @UpdateDateColumn()
     updatedOn!: Date;
 
     @BeforeInsert()

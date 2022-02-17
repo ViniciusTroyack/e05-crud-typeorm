@@ -11,10 +11,9 @@ export const isAuthenticated = (req: Request, res: Response, next: NextFunction)
             return next(new ErrorClass("Missing authorization headers", 401));
         }
         
-        const userIsAdmin = decoded.isAdmin;
         const userID = decoded.id;
 
-        req.user = { isAdmin: userIsAdmin, id: userID}
+        req.user = {id: userID}
 
         next();
     });
